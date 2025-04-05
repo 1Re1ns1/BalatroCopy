@@ -87,6 +87,7 @@ CTestTestfile.cmake
 _deps
 cmake-build-debug/
 build/
+.cache/
 
 ### CMake Patch ###
 CMakeUserPresets.json

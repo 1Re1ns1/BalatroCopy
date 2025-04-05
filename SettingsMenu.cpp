@@ -1,8 +1,6 @@
 #include "SettingsMenu.h"
 #include <SFML/Graphics.hpp>
 #include "AudioManager.h"
-#include <iostream>
-#include "MenuBalatro.h"
 #include <cmath>
 #include "VolumeSlider.h"
 #include "TextAnimator.h"

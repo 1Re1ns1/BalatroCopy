@@ -2,19 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "MenuBalatro.h"
-#include "GameMenu.h"
-#include "TextInput.h"
-#include <iostream>
-#include <unordered_map>
-#include "HadeMenu.h"
 #include "SettingsMenu.h"
 #include "AudioManager.h"
 #include <cmath>
-#include "VolumeSlider.h"
 
 // Новые подключенные классы
 #include "TitleLetters.h"
-#include "RectangleHover.h"
 #include "TextAnimator.h"
 #include "ExitPopup.h"
 #include "NamePopup.h"

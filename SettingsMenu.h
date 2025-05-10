@@ -10,6 +10,4 @@ inline bool Animation = true;
 void SettingsMenu(sf::RenderWindow& window);
 
 
-
-
 #endif //SETTINGSMENU_H

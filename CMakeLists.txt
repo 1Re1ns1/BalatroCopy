@@ -61,7 +61,7 @@ target_link_libraries(Balatro PRIVATE
 
 # Копирование DLL-файлов после сборки (Windows)
 if (WIN32)
-    add_custom_command(TARGET Balatro POST_BUILD
+        add_custom_command(TARGET Balatro POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:sfml-graphics>
             $<TARGET_FILE:sfml-audio>
@@ -71,17 +71,17 @@ if (WIN32)
     )
 endif()
 
+# Копируем нужные папки в директорию сборки
+file(COPY ${CMAKE_SOURCE_DIR}/Pictures DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/Fonts DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/Music DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/Button\ sound DESTINATION ${CMAKE_BINARY_DIR})
+
 # Базовые зависимости Windows API (опционально)
 if (MINGW)
-    target_link_libraries(Balatro PRIVATE
+        target_link_libraries(Balatro PRIVATE
             winmm
             gdi32
             opengl32
     )
-
-    # Копируем нужные папки в директорию сборки
-    file(COPY ${CMAKE_SOURCE_DIR}/Pictures DESTINATION ${CMAKE_BINARY_DIR})
-    file(COPY ${CMAKE_SOURCE_DIR}/Fonts DESTINATION ${CMAKE_BINARY_DIR})
-    file(COPY ${CMAKE_SOURCE_DIR}/Music DESTINATION ${CMAKE_BINARY_DIR})
-    file(COPY ${CMAKE_SOURCE_DIR}/Button\ sound DESTINATION ${CMAKE_BINARY_DIR})
 endif()

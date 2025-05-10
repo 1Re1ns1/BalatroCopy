@@ -4,7 +4,6 @@
 
 #include "MenuPause.h"
 
-#include "GameMenu.h"
 #include "MenuBalatro.h"
 
 PauseMenu::PauseMenu(const sf::Font& font, const sf::Vector2u& windowSize) : visible(false) {

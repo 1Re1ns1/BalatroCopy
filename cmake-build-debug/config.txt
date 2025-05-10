@@ -1,2 +1,0 @@
-musicVolume=29.0179
-masterVolume=100

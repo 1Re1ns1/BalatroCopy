@@ -1,7 +1,6 @@
 
 #include "VolumeSlider.h"
 #include <sstream>
-#include <iomanip>
 VolumeSlider::VolumeSlider(const sf::Texture& backgroundTex, const sf::Texture& fillTex, const sf::Font& font, sf::Vector2f position, float scale)
     : volume(100.f), dragging(false), scale(scale), fillTexture(fillTex)
 {

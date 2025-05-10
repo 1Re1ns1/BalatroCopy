@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "GameMenu.h"
-#include "MenuBalatro.h"
 #include "TextInput.h"
 #include <iostream>
 #include "MenuPause.h"

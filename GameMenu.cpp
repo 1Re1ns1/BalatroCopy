@@ -79,10 +79,10 @@ void InitRulesMenu(sf::Font& font, sf::RenderWindow& window) {
     helpTitle.setPosition(window.getSize().x / 2.f - helpTitle.getGlobalBounds().width / 2.f, 20);
 
     std::vector<std::string> rules = {
-        "- Aby wygrać rundę, gracz musi zdobyć więcej punktów niż komputer.",
-        "- Klikając lewym przyciskiem myszy na kość, można ją przerzucić (maksymalnie 3 razy w sumie).",
-        "- Naciśnięcie klawisza R przerzuca wszystkie kości, ale tylko raz.",
-        "- W jednej grze można odkryć tylko 2 kości przeciwnika."
+        "- To win a round, the player must score more points than the computer.",
+"- By clicking the left mouse button on a die, you can reroll it (up to 3 times in total).",
+"- Pressing the R key rerolls all dice, but only once.",
+"- In one game, you can reveal only 2 of the opponent's dice."
     };
 
     float y = window.getSize().y/2.f;
@@ -111,14 +111,14 @@ void UpdateRerollTexts(int totalRerolls, int allRerolls, sf::Font& font, sf::Ren
     rerollInfo.setFont(font);
     rerollInfo.setCharacterSize(20);
     rerollInfo.setFillColor(sf::Color::Yellow);
-    rerollInfo.setString("Pozostale przerzuty: " + std::to_string(totalRerolls));
-    rerollInfo.setPosition(window.getSize().x - 300, 40);
+    rerollInfo.setString("Remaining rerolls: " + std::to_string(totalRerolls));
+    rerollInfo.setPosition(20, window.getSize().y - 60);
 
     allrerollInfo.setFont(font);
     allrerollInfo.setCharacterSize(20);
     allrerollInfo.setFillColor(sf::Color::Cyan);
-    allrerollInfo.setString("Przerzut wszystkich: " + std::to_string(allRerolls));
-    allrerollInfo.setPosition(window.getSize().x - 300, 70);
+    allrerollInfo.setString("Full reroll available: " + std::to_string(allRerolls));
+    allrerollInfo.setPosition(20, window.getSize().y - 30);
 }
 
 void GameMenu(sf::RenderWindow& window) {
@@ -181,10 +181,10 @@ void GameMenu(sf::RenderWindow& window) {
     SwayText1 swayTab(titleTab, titleTab.getPosition());
     SwayText1 swayTabOutline(titleTabOutline, titleTab.getPosition());
 
-    sf::Text titleScore = TextAnimator::createText("Score:", font, 70, sf::Color::White);
-    sf::Text titleScoreOutline = TextAnimator::createText("Score:", font, 70, sf::Color::Black);
+    sf::Text titleScore = TextAnimator::createText("Score:", font, 90, sf::Color::White);
+    sf::Text titleScoreOutline = TextAnimator::createText("Score:", font, 90, sf::Color::Black);
 
-    titleScore.setPosition(window.getSize().x / 11.f, window.getSize().y / 3.f);
+    titleScore.setPosition(window.getSize().x / 2.f +  100, window.getSize().y /1.5);
     titleScoreOutline.setPosition(titleScore.getPosition());
 
     SwayText2 swayScore(titleScore, titleScore.getPosition());
@@ -198,6 +198,33 @@ void GameMenu(sf::RenderWindow& window) {
 
     SwayText1 swayRules(titleRules, titleRules.getPosition());
     SwayText1 swayRulesOutline(titleRulesOutline, titleRules.getPosition());
+
+    sf::Text ScoreComputer = TextAnimator::createText("Computer Score:", font, 90, sf::Color::White);
+    sf::Text ScoreComputerOutline = TextAnimator::createText("Computer Score:", font, 90, sf::Color::Black);
+
+    ScoreComputer.setPosition(window.getSize().x / 2.f + 100, window.getSize().y / 4.f);
+    ScoreComputerOutline.setPosition(ScoreComputer.getPosition());
+
+    SwayText1 swayComputer(ScoreComputer, ScoreComputer.getPosition());
+    SwayText1 swayComputerOutline(ScoreComputerOutline, ScoreComputer.getPosition());
+
+    sf::Text EndRound = TextAnimator::createText("END ROUND", font, 110, sf::Color::White);
+    sf::Text EndRoundOutline = TextAnimator::createText("END ROUND", font, 110, sf::Color::Black);
+
+    EndRound.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
+    EndRoundOutline.setPosition(EndRound.getPosition());
+
+    SwayText1 swayEndRound(EndRound, EndRound.getPosition());
+    SwayText1 swayEndRoundOutline(EndRoundOutline, EndRound.getPosition());
+
+    sf::Text resultText;
+    sf::Text resultOutline;
+    resultText.setFont(font);
+    resultText.setCharacterSize(100);
+    resultText.setPosition(window.getSize().x / 2.f  + 300, window.getSize().y / 2.f);
+
+    resultOutline.setFillColor(sf::Color::Black);
+    resultOutline.setPosition(resultText.getPosition().x + 2, resultText.getPosition().y + 2);
 
     std::vector<DicesBalatro> diceSprites = DicesBalatro::generateDiceSet(5, diceTextures, window, DiceRow::Bottom);
     std::vector<DicesBalatro> diceComputer = DicesBalatro::generateDiceSet(5, diceTextures, window, DiceRow::Top);
@@ -240,6 +267,11 @@ void GameMenu(sf::RenderWindow& window) {
     sf::Clock swayClock;
     int totalRerolls = 3;
     int allReroles = 1;
+    int revealedEnemyDice = 2;
+    std::vector<bool> enemyDiceRevealed(5, true);
+    bool endRound = false;
+    bool playerWon = false;
+    bool roundEnded = false;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -286,6 +318,10 @@ void GameMenu(sf::RenderWindow& window) {
                 showHelpMenu = false;
                 AudioManager::playClick();
                 }
+                if (gameRules && !helpMenuBackground.getGlobalBounds().contains(mouse)) {
+                    gameRules = false;
+                    AudioManager::playClick();
+                }
                 if (totalRerolls > 0) {
                     for (auto& dice : diceSprites) {
                         if (dice.getSprite()->getGlobalBounds().contains(mouse)) {
@@ -294,6 +330,29 @@ void GameMenu(sf::RenderWindow& window) {
                             break;
                         }
                     }
+                }
+                for (size_t i = 0; i < noComputer.size(); ++i) {
+                    if (enemyDiceRevealed[i] && noComputer[i].getSprite()->getGlobalBounds().contains(mouse)) {
+                        if (revealedEnemyDice > 0) {
+                            enemyDiceRevealed[i] = false; // Скрыть кубик
+                            revealedEnemyDice--;
+                            AudioManager::playClick();
+                            break;
+                        }
+                    }
+                }
+                if (EndRound.getGlobalBounds().contains(mouse)) {
+                    DicesBalatro::rerollDiceSet(diceSprites, diceTextures);
+                    DicesBalatro::rerollDiceSet(diceComputer, diceTextures);
+                    endRound = true;
+                    int playerScore = DicesBalatro::calculateDiceScore(diceSprites, diceTextures);
+                    int computerScore = DicesBalatro::calculateDiceScore(diceComputer, diceTextures);
+                    playerWon = (playerScore >= computerScore);
+                    roundEnded = true;
+                    resultText.setString(playerWon ? "YOU WIN" : "YOU LOSE");
+                    resultText.setFillColor(playerWon ? sf::Color::Green : sf::Color::Red);
+
+                    resultOutline = resultText;
                 }
             }
             if (gamePaused) {
@@ -324,6 +383,7 @@ void GameMenu(sf::RenderWindow& window) {
             TextAnimator::applyHoverEffect(titleMenu, titleMenuOutline, window);
             TextAnimator::applyHoverEffect(titleTab, titleTabOutline, window);
             TextAnimator::applyHoverEffect(titleRules, titleRulesOutline, window);
+            TextAnimator::applyHoverEffect(EndRound, EndRoundOutline, window);
         }
 
         if (!fadefinished) {
@@ -334,9 +394,11 @@ void GameMenu(sf::RenderWindow& window) {
 
         UpdateRerollTexts(totalRerolls, allReroles, font, window);
         int score = DicesBalatro::calculateDiceScore(diceSprites, diceTextures);
+        int scorecomputer  = DicesBalatro::calculateDiceScore(diceComputer, diceTextures);
         int lastDiceScore = score;  // сохранить глобально или передать куда нужно
         std::cout << score << std::endl;
         titleScore.setString("Score: " + std::to_string(score));
+        ScoreComputer.setString("Computer Score: " + std::to_string(scorecomputer));
         float swayTime = swayClock.getElapsedTime().asSeconds();
         window.clear();
         window.draw(backgroundSprite);
@@ -347,20 +409,35 @@ void GameMenu(sf::RenderWindow& window) {
         swayTab.update(swayTime);
         swayScore.update(swayTime);
         swayRules.update(swayTime);
+        swayMenuOutline.update(swayTime);
+        swayComputerOutline.update(swayTime);
+        swayRulesOutline.update(swayTime);
+        swayScoreOutline.update(swayTime);
+        swayTabOutline.update(swayTime);
+        swayEndRoundOutline.update(swayTime);
+        swayEndRound.update(swayTime);
         window.draw(rerollInfo);
         window.draw(allrerollInfo);
         TextAnimator::drawWithOutline(window, titleMenu, titleMenuOutline);
         TextAnimator::drawWithOutline(window, titleTab, titleTabOutline);
         TextAnimator::drawWithOutline(window, titleScore, titleScoreOutline);
         TextAnimator::drawWithOutline(window, titleRules, titleRulesOutline);
+        TextAnimator::drawWithOutline(window, EndRound, EndRoundOutline);
         for (auto& dice : diceSprites) {
             dice.draw(window);
         }
         for (auto& dice : diceComputer) {
             dice.draw(window); // верхний ряд
         }
-        for (auto& clone : noComputer) {
-            clone.draw(window); // верхний ряд
+        for (size_t i = 0; i < noComputer.size(); ++i) {
+            if (enemyDiceRevealed[i]) {
+                noComputer[i].draw(window);
+            }
+        }
+        if (roundEnded) {
+            window.draw(resultOutline);
+            window.draw(resultText);
+            TextAnimator::drawWithOutline(window, ScoreComputer, ScoreComputerOutline);
         }
         if (showHelpMenu) {
             InitHelpMenu(font, window);

@@ -9,7 +9,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
-
+#include "RectangleHover.h"
 class PauseMenu {
 public:
     PauseMenu(const sf::Font& font, const sf::Vector2u& windowSize);
@@ -18,7 +18,9 @@ public:
     bool isOpen() const;
     void open();
     void close();
-    void exitgame();
+    void exitMenu(const sf::RenderWindow& window);
+    void exitDraw(sf::RenderWindow& window);
+    void handleEventExit(const sf::Event& event, sf::RenderWindow& window);
 
 private:
     sf::RectangleShape background;
@@ -27,6 +29,14 @@ private:
     sf::Text settingsText;
     sf::Text exitText;
     bool visible;
+    sf::Text promptText;
+    sf::RectangleShape okButton;
+    sf::Text okText;
+    sf::RectangleShape backButton;
+    sf::Text backText;
+    bool visibleExit;
+    const sf::Font* font;
+    sf::RectangleShape backgroundExit;
 };
 
 

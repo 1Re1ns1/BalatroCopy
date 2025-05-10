@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include <cmath>
 
+#include "SettingsMenu.h"
+
 namespace {
     std::unordered_map<const sf::Text*, float> scaleFactors;
     const float scaleSpeed = 0.1f;
@@ -26,25 +28,26 @@ sf::Text TextAnimator::createText(const std::string& str, const sf::Font& font, 
 
 void TextAnimator::applyHoverEffect(sf::Text& text, sf::Text& outline, sf::RenderWindow& window) {
     sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+    if (Animation) {
+        if (scaleFactors.find(&text) == scaleFactors.end()) {
+            scaleFactors[&text] = minScale;
+        }
 
-    if (scaleFactors.find(&text) == scaleFactors.end()) {
-        scaleFactors[&text] = minScale;
-    }
+        float& scale = scaleFactors[&text];
+        bool isHovered = text.getGlobalBounds().contains(mousePos);
 
-    float& scale = scaleFactors[&text];
-    bool isHovered = text.getGlobalBounds().contains(mousePos);
+        if (isHovered) {
+            scale = std::min(scale + (maxScale - scale) * scaleSpeed, maxScale);
+        } else {
+            scale = std::max(scale - (scale - minScale) * scaleSpeed, minScale);
+        }
 
-    if (isHovered) {
-        scale = std::min(scale + (maxScale - scale) * scaleSpeed, maxScale);
-    } else {
-        scale = std::max(scale - (scale - minScale) * scaleSpeed, minScale);
-    }
+        text.setScale(scale, scale);
+        outline.setScale(scale * outlineScaleFactor, scale * outlineScaleFactor);
 
-    text.setScale(scale, scale);
-    outline.setScale(scale * outlineScaleFactor, scale * outlineScaleFactor);
-
-    if (!isHovered) {
-        outline.setScale(0.f, 0.f);
+        if (!isHovered) {
+            outline.setScale(0.f, 0.f);
+        }
     }
 }
 

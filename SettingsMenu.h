@@ -8,7 +8,10 @@
 
 inline bool Animation = true;
 void SettingsMenu(sf::RenderWindow& window);
+extern sf::RenderWindow window;
+extern bool isFullscreen;
 
+void createWindow(bool fullscreen);
 
 
 

@@ -38,10 +38,12 @@ TitleLetters::TitleLetters(const std::string& text, const sf::Font& font, sf::Ve
 }
 
 void TitleLetters::update(float swayOffset) {
-    for (size_t i = 0; i < letters.size(); ++i) {
-        sf::Vector2f pos = initialPositions[i];
-        letters[i].setPosition(pos.x + swayOffset, pos.y);
-        outlines[i].setPosition(pos.x + swayOffset + 2, pos.y + 2);  // Синхронізація
+    if (Animation) {
+        for (size_t i = 0; i < letters.size(); ++i) {
+            sf::Vector2f pos = initialPositions[i];
+            letters[i].setPosition(pos.x + swayOffset, pos.y);
+            outlines[i].setPosition(pos.x + swayOffset + 2, pos.y + 2);  // Синхронізація
+        }
     }
 }
 

@@ -3,7 +3,13 @@
 #include "AudioManager.h"
 #include "MenuBalatro.h"
 #include "HadeMenu.h"
+#include <SFML/Graphics.hpp>
+
+sf::RenderWindow window;
+bool isFullscreen = false;
+
 int main() {
+    AudioManager::init();
     sf::RenderWindow window(sf::VideoMode(), "Balatro", sf::Style::Fullscreen);
     // Запуск меню
     HadeMenu(window);

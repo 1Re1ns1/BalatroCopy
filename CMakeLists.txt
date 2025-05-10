@@ -49,7 +49,9 @@ add_executable(Balatro main.cpp
         FadeEffect.cpp
         FadeEffect.h
         SwayText.cpp
-        SwayText.h)
+        SwayText.h
+        DicesBalatro.cpp
+        DicesBalatro.h)
 
 # Линкуем SFML (динамически)
 target_link_libraries(Balatro PRIVATE
@@ -84,4 +86,6 @@ if (MINGW)
     file(COPY ${CMAKE_SOURCE_DIR}/Fonts DESTINATION ${CMAKE_BINARY_DIR})
     file(COPY ${CMAKE_SOURCE_DIR}/Music DESTINATION ${CMAKE_BINARY_DIR})
     file(COPY ${CMAKE_SOURCE_DIR}/Button\ sound DESTINATION ${CMAKE_BINARY_DIR})
+    file(COPY ${CMAKE_SOURCE_DIR}/Texture DESTINATION ${CMAKE_BINARY_DIR})
+    file(COPY ${CMAKE_SOURCE_DIR}/Textures2 DESTINATION ${CMAKE_BINARY_DIR})
 endif()

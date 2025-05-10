@@ -161,6 +161,13 @@ build CMakeFiles/Balatro.dir/SwayText.cpp.obj: CXX_COMPILER__Balatro_unscanned_D
   OBJECT_DIR = CMakeFiles\Balatro.dir
   OBJECT_FILE_DIR = CMakeFiles\Balatro.dir
 
+build CMakeFiles/Balatro.dir/DicesBalatro.cpp.obj: CXX_COMPILER__Balatro_unscanned_Debug C$:/Projects$ c++/Balatro/DicesBalatro.cpp || cmake_object_order_depends_target_Balatro
+  DEP_FILE = CMakeFiles\Balatro.dir\DicesBalatro.cpp.obj.d
+  FLAGS = -g -std=c++20 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Projects c++/Balatro/cmake-build-debug/_deps/sfml-src/include"
+  OBJECT_DIR = CMakeFiles\Balatro.dir
+  OBJECT_FILE_DIR = CMakeFiles\Balatro.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Balatro
@@ -169,7 +176,7 @@ build CMakeFiles/Balatro.dir/SwayText.cpp.obj: CXX_COMPILER__Balatro_unscanned_D
 #############################################
 # Link the executable Balatro.exe
 
-build Balatro.exe: CXX_EXECUTABLE_LINKER__Balatro_Debug CMakeFiles/Balatro.dir/main.cpp.obj CMakeFiles/Balatro.dir/MenuBalatro.cpp.obj CMakeFiles/Balatro.dir/GameMenu.cpp.obj CMakeFiles/Balatro.dir/TextInput.cpp.obj CMakeFiles/Balatro.dir/HadeMenu.cpp.obj CMakeFiles/Balatro.dir/AudioManager.cpp.obj CMakeFiles/Balatro.dir/SettingsMenu.cpp.obj CMakeFiles/Balatro.dir/VolumeSlider.cpp.obj CMakeFiles/Balatro.dir/MenuPause.cpp.obj CMakeFiles/Balatro.dir/ExitPopup.cpp.obj CMakeFiles/Balatro.dir/TextAnimator.cpp.obj CMakeFiles/Balatro.dir/RectangleHover.cpp.obj CMakeFiles/Balatro.dir/TitleLetters.cpp.obj CMakeFiles/Balatro.dir/NamePopup.cpp.obj CMakeFiles/Balatro.dir/FadeEffect.cpp.obj CMakeFiles/Balatro.dir/SwayText.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-d.a _deps/sfml-build/lib/libsfml-audio-d.a _deps/sfml-build/lib/libsfml-window-d.a _deps/sfml-build/lib/libsfml-system-d.a || _deps/sfml-build/lib/sfml-audio-d-2.dll _deps/sfml-build/lib/sfml-graphics-d-2.dll _deps/sfml-build/lib/sfml-system-d-2.dll _deps/sfml-build/lib/sfml-window-d-2.dll
+build Balatro.exe: CXX_EXECUTABLE_LINKER__Balatro_Debug CMakeFiles/Balatro.dir/main.cpp.obj CMakeFiles/Balatro.dir/MenuBalatro.cpp.obj CMakeFiles/Balatro.dir/GameMenu.cpp.obj CMakeFiles/Balatro.dir/TextInput.cpp.obj CMakeFiles/Balatro.dir/HadeMenu.cpp.obj CMakeFiles/Balatro.dir/AudioManager.cpp.obj CMakeFiles/Balatro.dir/SettingsMenu.cpp.obj CMakeFiles/Balatro.dir/VolumeSlider.cpp.obj CMakeFiles/Balatro.dir/MenuPause.cpp.obj CMakeFiles/Balatro.dir/ExitPopup.cpp.obj CMakeFiles/Balatro.dir/TextAnimator.cpp.obj CMakeFiles/Balatro.dir/RectangleHover.cpp.obj CMakeFiles/Balatro.dir/TitleLetters.cpp.obj CMakeFiles/Balatro.dir/NamePopup.cpp.obj CMakeFiles/Balatro.dir/FadeEffect.cpp.obj CMakeFiles/Balatro.dir/SwayText.cpp.obj CMakeFiles/Balatro.dir/DicesBalatro.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-d.a _deps/sfml-build/lib/libsfml-audio-d.a _deps/sfml-build/lib/libsfml-window-d.a _deps/sfml-build/lib/libsfml-system-d.a || _deps/sfml-build/lib/sfml-audio-d-2.dll _deps/sfml-build/lib/sfml-graphics-d-2.dll _deps/sfml-build/lib/sfml-system-d-2.dll _deps/sfml-build/lib/sfml-window-d-2.dll
   FLAGS = -g
   LINK_LIBRARIES = _deps/sfml-build/lib/libsfml-graphics-d.a  _deps/sfml-build/lib/libsfml-audio-d.a  _deps/sfml-build/lib/libsfml-window-d.a  _deps/sfml-build/lib/libsfml-system-d.a  -lwinmm  -lgdi32  -lopengl32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Balatro.dir

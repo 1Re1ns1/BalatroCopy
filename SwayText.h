@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include "SettingsMenu.h"
 
 class SwayText1 {
 public:
@@ -10,8 +11,10 @@ public:
         : text(text), originalPos(originalPos) {}
 
     void update(float time) {
-        float offset = std::sin(time * 2.f) * 5.f;
-        text.setPosition(originalPos.x + offset, originalPos.y);
+        if (Animation) {
+            float offset = std::sin(time * 2.f) * 5.f;
+            text.setPosition(originalPos.x + offset, originalPos.y);
+        }
     }
 
 private:
@@ -24,8 +27,10 @@ public:
         : text(text), originalPos(originalPos) {}
 
     void update(float time) {
-        float offset = std::sin(time * 2.f) * 5.f;
-        text.setPosition(originalPos.x - offset, originalPos.y);
+        if (Animation) {
+            float offset = std::sin(time * 2.f) * 5.f;
+            text.setPosition(originalPos.x - offset, originalPos.y);
+        }
     }
 
 private:

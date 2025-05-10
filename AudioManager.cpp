@@ -6,7 +6,7 @@
 sf::Music AudioManager::music;
 sf::Sound AudioManager::clickSound;
 sf::SoundBuffer AudioManager::clickBuffer;
-AudioManager::Track AudioManager::currentTrack;
+AudioManager::Track AudioManager::currentTrack = AudioManager::Track::Menu;
 float AudioManager::musicVolume = 100.f;
 float AudioManager::masterVolume = 100.f;
 
@@ -18,27 +18,48 @@ void AudioManager::init() {
     loadConfig();
 
     if (!clickBuffer.loadFromFile("Button sound/click.ogg")) {
-        std::cerr << "Error loading click sound\n";
+        std::cerr << "[AudioManager] Error loading click sound: Button sound/click.ogg\n";
+    } else {
+        clickSound.setBuffer(clickBuffer);
+        clickSound.setVolume(masterVolume);
     }
-    clickSound.setBuffer(clickBuffer);
-    clickSound.setVolume(masterVolume);
 
-    play(Track::Menu); // по умолчанию
+    play(Track::Menu); // Воспроизведение по умолчанию
 }
 
 void AudioManager::play(Track track) {
-    if (currentTrack == track && music.getStatus() == sf::Music::Playing) return;
+    if (music.getStatus() == sf::Music::Playing)
+        music.stop();
 
-    if (!music.openFromFile(trackPaths[track])) {
-        std::cerr << "Ошибка загрузки трека!" << std::endl;
+    auto it = trackPaths.find(track);
+    if (it == trackPaths.end()) {
+        std::cerr << "Track not found\n";
         return;
     }
 
-    currentTrack = track;
+    std::string path = it->second;
+
+    if (!sf::SoundBuffer().loadFromFile(path)) {
+        std::cerr << "Just test: file cannot be decoded properly: " << path << "\n";
+        return;
+    }
+
+    if (!music.openFromFile(path)) {
+        std::cerr << "Failed to open music file: " << path << "\n";
+        return;
+    }
+
+    std::cout << "Loaded and about to play: " << path << "\n";
+
     music.setLoop(true);
     music.setVolume(musicVolume * (masterVolume / 100.f));
     music.play();
+
+    if (music.getStatus() != sf::Music::Playing) {
+        std::cerr << "[AudioManager] ERROR: music.play() failed\n";
+    }
 }
+
 
 void AudioManager::stop() {
     music.stop();
@@ -68,6 +89,12 @@ bool AudioManager::isPlaying() {
 }
 
 void AudioManager::playClick() {
+    if (clickBuffer.getDuration() == sf::Time::Zero) {
+        std::cerr << "[AudioManager] Warning: click sound not loaded properly\n";
+        return;
+    }
+
+    clickSound.stop();  // Прекращаем прежний щелчок, если ещё играет
     clickSound.play();
 }
 
@@ -75,8 +102,8 @@ void AudioManager::saveConfig() {
     std::ofstream file("config.txt");
     if (!file.is_open()) return;
 
-    file << "musicVolume=" << musicVolume << std::endl;
-    file << "masterVolume=" << masterVolume << std::endl;
+    file << "musicVolume=" << musicVolume << '\n';
+    file << "masterVolume=" << masterVolume << '\n';
 }
 
 void AudioManager::loadConfig() {
@@ -96,4 +123,3 @@ void AudioManager::loadConfig() {
         }
     }
 }
-

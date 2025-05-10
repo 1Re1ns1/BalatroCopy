@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include "SettingsMenu.h"
 
 class TitleLetters : public sf::Drawable { // Наследуемся от sf::Drawable
 public:

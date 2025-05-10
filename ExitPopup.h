@@ -18,6 +18,7 @@ public:
     bool isVisible() const;
     void show();
     void hide();
+
     sf::RectangleShape background;
     sf::RectangleShape okButton;
     sf::Text okText;

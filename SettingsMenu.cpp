@@ -8,7 +8,20 @@
 #include "TextAnimator.h"
 #include <unordered_map>
 
-// Hover effect for sprites
+extern sf::RenderWindow window;
+extern bool isFullscreen;
+
+void recreateWindow(bool fullscreen) {
+    isFullscreen = fullscreen;
+    window.close();
+
+    sf::VideoMode mode = fullscreen ? sf::VideoMode::getDesktopMode() : sf::VideoMode(1280, 720);
+    sf::Uint32 style = fullscreen ? sf::Style::Fullscreen : (sf::Style::Titlebar | sf::Style::Close);
+
+    window.create(mode, "Gra Kosciana", style);
+    window.setFramerateLimit(60);
+}
+
 std::unordered_map<sf::Sprite*, sf::Vector2f> originalSpriteScales;
 std::unordered_map<sf::Sprite*, sf::Vector2f> originalSpritePositions;
 
@@ -98,29 +111,28 @@ void SettingsMenu(sf::RenderWindow& window) {
                              {window.getSize().x / 2.f - 200, window.getSize().y / 6.f}, 2.f);
     musicSlider.setVolume(AudioManager::getMusicVolume());
 
-    sf::Text volumeText;
-    volumeText.setFont(font);
-    volumeText.setCharacterSize(24);
-    volumeText.setFillColor(sf::Color::White);
-
     sf::Text title2 = TextAnimator::createText("Exit", font, 100, sf::Color::White);
     sf::Text outlinetitle2 = TextAnimator::createText("Exit", font, 100, sf::Color::Black);
 
     sf::Text musicvolume = TextAnimator::createText("Music Volume", font, 80, sf::Color::White);
     sf::Text mastervolume = TextAnimator::createText("Master Volume", font, 80, sf::Color::White);
-    sf::Text animetiontext = TextAnimator::createText("Animetion", font, 80, sf::Color::White);
+    sf::Text animetiontext = TextAnimator::createText("Animation", font, 80, sf::Color::White);
+    sf::Text fullscreenText = TextAnimator::createText("Fullscreen", font, 80, sf::Color::White);
     sf::Text options = TextAnimator::createText("Options", font, 100, sf::Color::White);
 
-    musicvolume.setPosition(window.getSize().x / 6.f+100.f, window.getSize().y / 7.f);
-    mastervolume.setPosition(window.getSize().x / 6.f +100.f, window.getSize().y / 7.f + 120);
+    musicvolume.setPosition(window.getSize().x / 6.f + 100.f, window.getSize().y / 7.f);
+    mastervolume.setPosition(window.getSize().x / 6.f + 100.f, window.getSize().y / 7.f + 120);
+    animetiontext.setPosition(window.getSize().x / 6.f + 100.f, window.getSize().y / 7.f + 240);
+    fullscreenText.setPosition(window.getSize().x / 6.f + 100.f, window.getSize().y / 7.f + 360);
+    options.setPosition(window.getSize().x / 2, 30);
+
     buttonokSprite.setPosition(window.getSize().x / 1.5f, window.getSize().y / 3.f);
     buttonnoSprite.setPosition(window.getSize().x / 1.5f, window.getSize().y / 3.f);
-    animetiontext.setPosition(window.getSize().x / 6.f+100.f, window.getSize().y / 7.f + 240);
-    options.setPosition(window.getSize().x / 2, 30);
-    sf::RectangleShape roundedBox = createRoundedOverlay(window);
 
+    sf::RectangleShape roundedBox = createRoundedOverlay(window);
     sf::Clock swayClock;
     float baseY = window.getSize().y / 2;
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -146,10 +158,24 @@ void SettingsMenu(sf::RenderWindow& window) {
                     return;
                 }
 
-                if (buttonokSprite.getGlobalBounds().contains(mousePos)) {
-                    Animation = false;
-                } else if (buttonnoSprite.getGlobalBounds().contains(mousePos)) {
-                    Animation = true;
+                if (Animation) {
+                    if (buttonokSprite.getGlobalBounds().contains(mousePos)) {
+                        Animation = false;
+                        AudioManager::playClick();
+                    }
+                } else {
+                    if (buttonnoSprite.getGlobalBounds().contains(mousePos)) {
+                        Animation = true;
+                        AudioManager::playClick();
+                    }
+                }
+
+                if (fullscreenText.getGlobalBounds().contains(mousePos)) {
+                    isFullscreen = !isFullscreen;
+                    AudioManager::saveConfig();
+                    recreateWindow(isFullscreen);
+                    SettingsMenu(window); // Перезапускаем меню уже с новым окном
+                    return;
                 }
             }
 
@@ -183,6 +209,7 @@ void SettingsMenu(sf::RenderWindow& window) {
         window.draw(musicvolume);
         window.draw(mastervolume);
         window.draw(animetiontext);
+        window.draw(fullscreenText);
         window.draw(options);
         masterSlider.draw(window);
         musicSlider.draw(window);

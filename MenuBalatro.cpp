@@ -96,7 +96,7 @@ void MenuBalatro(sf::RenderWindow& window) {
         &namePopup.promptText,
         &namePopup.inputText, &namePopup.okText,
         &namePopup.backButton, &namePopup.backText,
-        &namePopup.okButton, &namePopup.inputText, &namePopup.inputBox
+        &namePopup.okButton, &namePopup.okText, &namePopup.inputText, &namePopup.inputBox
     });
 
             if (showBackPopup)

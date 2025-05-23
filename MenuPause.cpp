@@ -4,6 +4,10 @@
 #include "AudioManager.h"
 #include "RectangleHover.h"
 
+sf::RectangleShape fadeOverlay;
+double fadeAlpha = 0;
+bool startFadeOut = false;
+
 PauseMenu::PauseMenu(const sf::Font& fontRef, const sf::Vector2u& windowSize)
     : visible(false), visibleExit(false), font(&fontRef) {
 
@@ -33,6 +37,9 @@ PauseMenu::PauseMenu(const sf::Font& fontRef, const sf::Vector2u& windowSize)
     exitText.setCharacterSize(40);
     exitText.setFillColor(sf::Color::White);
     exitText.setPosition(windowSize.x / 2.f - 45, windowSize.y / 2.f + 200);
+
+    fadeOverlay.setSize(sf::Vector2f(windowSize.x, windowSize.y));
+    fadeOverlay.setFillColor(sf::Color(0, 0, 0, 0));
 }
 
 void PauseMenu::draw(sf::RenderWindow& window) {
@@ -93,6 +100,15 @@ void PauseMenu::exitDraw(sf::RenderWindow& window) {
     window.draw(okText);
     window.draw(backButton);
     window.draw(backText);
+    if (startFadeOut && fadeAlpha < 255) {
+        fadeAlpha += 0.5;  // Крок затемнення (можна змінити швидкість)
+        if (fadeAlpha >= 255) {
+            fadeAlpha = 255;
+            window.close();  // Закриваємо після повного затемнення
+        }
+        fadeOverlay.setFillColor(sf::Color(0, 0, 0, fadeAlpha));
+        window.draw(fadeOverlay);
+    }
 }
 
 void PauseMenu::handleEventExit(const sf::Event& event, sf::RenderWindow& window) {
@@ -106,8 +122,7 @@ void PauseMenu::handleEventExit(const sf::Event& event, sf::RenderWindow& window
 
         if (okButton.getGlobalBounds().contains(mouse)) {
             AudioManager::playClick();
-            visibleExit = false;
-            window.close();
+            startFadeOut = true;
         } else if (backButton.getGlobalBounds().contains(mouse)) {
             AudioManager::playClick();
             visibleExit = false;
@@ -115,8 +130,7 @@ void PauseMenu::handleEventExit(const sf::Event& event, sf::RenderWindow& window
     } else if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Enter) {
             AudioManager::playClick();
-            visibleExit = false;
-            window.close();
+            startFadeOut = true;
         } else if (event.key.code == sf::Keyboard::Escape) {
             AudioManager::playClick();
             visibleExit = false;
@@ -156,3 +170,4 @@ void PauseMenu::open() {
 void PauseMenu::close() {
     visible = false;
 }
+

@@ -10,6 +10,9 @@
 #include "DicesBalatro.h"
 #include "SwayText.h"
 #include "TextAnimator.h"
+#include "NamePopup.h"
+
+std::string inputStrings;
 
 sf::RectangleShape tabBackground;
 sf::RectangleShape helpMenuBackground;
@@ -365,6 +368,15 @@ void GameMenu(sf::RenderWindow& window) {
     SwayText2 swaytotalRounds(totalRounds, totalRounds.getPosition());
     SwayText2 swaytotalRoundsOutline(totalRoundsOutline, totalRounds.getPosition());
 
+    sf::Text playerNameTitel = TextAnimator::createText(inputStrings, font, 70, sf::Color::White);
+    sf::Text playerNameTitelOutline = TextAnimator::createText(inputStrings, font, 70, sf::Color::Black);
+
+    playerNameTitel.setPosition(window.getSize().x / 4.f, window.getSize().y / 1.38);
+    playerNameTitelOutline.setPosition(playerNameTitel.getPosition());
+
+    SwayText2 swayPlayreName(playerNameTitel, playerNameTitel.getPosition());
+    SwayText2 swayPlayerNamesOutline(playerNameTitelOutline, playerNameTitel.getPosition());
+
     sf::Text resultText;
     sf::Text resultOutline;
     resultText.setFont(font);
@@ -417,10 +429,17 @@ void GameMenu(sf::RenderWindow& window) {
 
     sf::RectangleShape endRoundPanel;
     endRoundPanel.setSize(sf::Vector2f({400.f, 100.f}));
-    endRoundPanel.setFillColor(sf::Color(30, 30, 30, 200));
+    endRoundPanel.setFillColor(sf::Color(30, 30, 30, 255));
     endRoundPanel.setPosition(window.getSize().x / 10, window.getSize().y / 2);
     endRoundPanel.setOutlineThickness(2);
     endRoundPanel.setOutlineColor(sf::Color::White);
+
+    sf::RectangleShape namePanel;
+    namePanel.setSize(sf::Vector2f({200.f, 100.f}));
+    namePanel.setFillColor(sf::Color(30, 30, 30, 200));
+    namePanel.setPosition(window.getSize().x / 5.f, window.getSize().y / 1.4);
+    namePanel.setOutlineThickness(2);
+    namePanel.setOutlineColor(sf::Color::White);
 
     bool showHelpMenu = false;
     bool fadefinished = false;
@@ -589,6 +608,7 @@ void GameMenu(sf::RenderWindow& window) {
             window.draw(playerPanel);
             window.draw(computerPanel);
             window.draw(endRoundPanel);
+            window.draw(namePanel);
             swayMenu.update(swayTime);
             swayTab.update(swayTime);
             swayScore.update(swayTime);
@@ -603,6 +623,8 @@ void GameMenu(sf::RenderWindow& window) {
             swayEndRound.update(swayTime);
             swaytotalRounds.update(swayTime);
             swaytotalRoundsOutline.update(swayTime);
+            swayPlayreName.update(swayTime);
+            swayPlayerNamesOutline.update(swayTime);
             window.draw(rerollInfo);
             window.draw(allrerollInfo);
             TextAnimator::drawWithOutline(window, titleMenu, titleMenuOutline);
@@ -611,6 +633,7 @@ void GameMenu(sf::RenderWindow& window) {
             TextAnimator::drawWithOutline(window, titleRules, titleRulesOutline);
             TextAnimator::drawWithOutline(window, EndRound, EndRoundOutline);
             TextAnimator::drawWithOutline(window, totalRounds, totalRoundsOutline);
+            TextAnimator::drawWithOutline(window, playerNameTitel, playerNameTitelOutline);
             DrawResultPopup(window);
             for (auto& dice : diceSprites) {
                 dice.draw(window);

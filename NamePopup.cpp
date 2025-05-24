@@ -4,6 +4,10 @@
 #include "GameMenu.h"
 #include "RectangleHover.h"
 #include "FadeEffect.h"
+#include <SFML/Graphics.hpp>
+#include <string>
+
+extern std::string inputStrings;
 
 NamePopup::NamePopup() : visible(false) {}
 
@@ -75,6 +79,8 @@ void NamePopup::handleEvent(const sf::Event& event, sf::RenderWindow& window, bo
         if (okButton.getGlobalBounds().contains(mouse)) {
             AudioManager::playClick();
             playerName = inputString;
+            extern std::string inputStrings;
+            inputStrings = playerName;
             showNamePopup = false;
             visible = false;
 
@@ -92,6 +98,8 @@ void NamePopup::handleEvent(const sf::Event& event, sf::RenderWindow& window, bo
         if (event.key.code == sf::Keyboard::Enter) {
             AudioManager::playClick();
             playerName = inputString;
+            extern std::string inputStrings;
+            inputStrings = playerName;
             showNamePopup = false;
             visible = false;
 
